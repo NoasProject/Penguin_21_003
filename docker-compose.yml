@@ -3,10 +3,9 @@ version: '3'
 services:
   web:
     build: ./api
-    command: /bin/bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -b
-      0.0.0.0"
+    command: /bin/bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
     ports:
-      - '3001:3001'
+      - '3003:3000'
     depends_on:
       - db
     volumes:
@@ -21,13 +20,13 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password
     ports:
-      - '3307:3307'
+      - '3403:3306'
   front:
     build: ./front
     volumes:
       - ./front:/app
     ports:
-      - '9090:8080'
+      - '9003:8080'
     tty: true
     stdin_open: true
     command: npm run serve

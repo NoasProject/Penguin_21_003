@@ -71,3 +71,22 @@ https://012-jp.vuejs.org/guide/
 npm install --save axios
 npm install --save vue-axios
 ```
+
+```
+# db設計？
+
+rails g scaffold UserProfile name:string description:string
+rails g scaffold Tweet user_id:integer content:string
+rails g scaffold Like tweet_id:integer user_id:integer
+rails g scaffold Comment tweet_id:integer user_id:integer comment:string
+```
+
+```
+# device auth
+https://qiita.com/tomokazu0112/items/5fdd6a51a84c520c45b5
+
+https://qiita.com/yokku21/items/5646214b0a0b6940c5bc
+
+https://ksss.ink/blog/posts/10-ruby-type
+# gem install steep
+```

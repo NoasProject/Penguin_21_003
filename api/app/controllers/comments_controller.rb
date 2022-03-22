@@ -1,7 +1,5 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: [:show, :update, :destroy]
-  before_action :authenticate_v1_user!
-  before_action :get_user
 
   # GET /comments
   def index

@@ -3,14 +3,9 @@ Rails.application.routes.draw do
   resources :comments
   resources :likes
   resources :tweets
-  resources :users
-  namespace :v1 do
-    mount_devise_token_auth_for "User", at: "auth"
-  end
+  # resources :users
 
-  # mount_devise_token_auth_for 'User', at: 'auth'
-  # as :user do
-  #   # Define routes for User within this block.
-  # end
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  post "users/exits" => "users#exits"
+  post "users/register" => "users#register"
+  post "users/login" => "users#login"
 end

@@ -55,22 +55,10 @@ export default {
     onClickComment: async function () {
       // 解除する
       await this.axios
-        .post("http://localhost:3002/comments/", {
+        .post("http://localhost:3003/comments/", {
           comment: {
             tweet_id: this.tweet.id,
             comment: this.input.comment,
-          },
-
-          uid: this.$cookies.get("uid"),
-          "access-token": this.$cookies.get("access-token"),
-          client: this.$cookies.get("client"),
-
-          headers: {
-            uid: this.$cookies.get("uid"),
-            "access-token": this.$cookies.get("access-token"),
-            client: this.$cookies.get("client"),
-            expiry: this.$cookies.get("expiry"),
-            "token-type": this.$cookies.get("token-type"),
           },
         })
         .then((response) => {

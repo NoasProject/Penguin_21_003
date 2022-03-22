@@ -1,12 +1,9 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy]
-  before_action :authenticate_v1_user!
-  before_action :get_user
 
   # GET /user
   def index
     @user = User.all
-    @user_ids = params[:user_ids].to_a.uniq
+    @user_ids = params[:user_ids].to_uniq_array
     if (@user_ids.size != 0)
       @user = @user.where(id: @user_ids)
     end
@@ -14,29 +11,42 @@ class UsersController < ApplicationController
     render json: @user
   end
 
-  # GET /user/1
-  def show
-    render json: @user
+  # POST /users/exits
+  # Userが存在するかチェックする
+  def exits
+    result = { is_register: false }
+
+    logger.debug @userAccount
+
+    # アカウントが存在する場合
+    if @userAccount != nil
+      result[:is_register] = true
+    end
+
+    render json: result
   end
 
-  # POST /user
-  def create
+  # POST /users/register
+  # Userを作成する
+  def register
     @user = User.new(user_params)
-
+    @user[:token] = @token
     if @user.save
-      render json: @user, status: :created, location: @user
+      render json: @user, status: :created
     else
       render json: @user.errors, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /user/1
-  def update
-    if @user.update(user_params)
-      render json: @user
-    else
-      render json: @user.errors, status: :unprocessable_entity
+  # POST /users/login
+  # Userを作成する
+  def login
+    if @userAccount.nil?
+      render json: { error_code: 1 }, status: :unprocessable_entity
     end
+
+    render json: @userAccount
+
   end
 
   # DELETE /user/1
@@ -46,13 +56,9 @@ class UsersController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_user
-    @user = User.find(params[:id])
-  end
-
   # Only allow a trusted parameter "white list" through.
   def user_params
     params.require(:user).permit(:name, :description)
   end
+
 end

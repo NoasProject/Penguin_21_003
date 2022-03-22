@@ -49,22 +49,10 @@ export default {
     onClickProfileSave: async function () {
       // 解除する
       await this.axios
-        .put("http://localhost:3002/users/" + this.user_id, {
+        .put(this.axios.defaults.baseUrl + "/users/" + this.user_id, {
           user: {
             name: this.input.name,
             description: this.input.description,
-          },
-
-          uid: this.$cookies.get("uid"),
-          "access-token": this.$cookies.get("access-token"),
-          client: this.$cookies.get("client"),
-
-          headers: {
-            uid: this.$cookies.get("uid"),
-            "access-token": this.$cookies.get("access-token"),
-            client: this.$cookies.get("client"),
-            expiry: this.$cookies.get("expiry"),
-            "token-type": this.$cookies.get("token-type"),
           },
         })
         .then((response) => {

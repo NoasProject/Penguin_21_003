@@ -4,15 +4,15 @@
       <b-col cols="3">
         <p>
           <!-- <div class="form-login-id"> -->
-            <label for="id">ログインID</label>
-            <input type="text" v-model="register.id"/>
+            <label for="id">名前</label>
+            <input type="text" v-model="register.name"/>
           <!-- </div> -->
         <br>
-          <label for="password">ログインパスワード</label>
-          <input type="text" v-model="register.password" />
+          <label for="password">説明文</label>
+          <input type="text" v-model="register.description" />
         <br>
         <!-- タイトルだけは必須入力 -->
-        <b-button :disabled="register.id == '' || register.password == ''" variant="success" style="width:100%;" v-on:click="onAccountRegister()">
+        <b-button :disabled="register.name == ''" variant="success" style="width:100%;" v-on:click="onAccountRegister()">
           登録する
         </b-button>
         </p>
@@ -28,8 +28,8 @@ export default {
     return {
       register: {
         id: "",
-        password: "",
         name: "NoName",
+        description: "",
         token: undefined,
       },
     };
@@ -38,42 +38,17 @@ export default {
   methods: {
     // アカウントの登録処理
     onAccountRegister: async function () {
-      var p = {
-        email: this.register.id,
-        password: this.register.password,
-        nickname: this.register.name,
-      };
-
-      await this.axios
-        .post("http://localhost:3002/v1/auth", p)
-        .then((response) => {
-          // var payload = response.data;
-
-          var accessToken = response.headers["access-token"];
-          var uid = response.headers["uid"];
-          var client = response.headers["client"];
-          var expiry = response.headers["expiry"];
-          var tokenType = response.headers["token-type"];
-          var userId = response.data["id"];
-
-          this.$cookies.set("access-token", accessToken, { expires: 5 });
-          this.$cookies.set("uid", uid, { expires: 5 });
-          this.$cookies.set("client", client, { expires: 5 });
-          this.$cookies.set("expiry", expiry, { expires: 5 });
-          this.$cookies.set("token-type", tokenType, { expires: 5 });
-          this.$cookies.set("user_id", userId, { expires: 5 });
-
-          this.axios.defaults.headers.common["X-CSRF-Token"] =
-            response.headers["x-csrf-token"];
-
-          console.log(response.data);
-        })
+      // アカウントの作成処理を行う
+      var isSuccess = await this.$account
+        .Register(this.register.name, this.register.description)
         .catch((e) => {
           alert(e);
-          throw e;
+          return;
         });
 
-      this.transitionTopPage();
+      if (isSuccess) {
+        this.transitionTopPage();
+      }
     },
 
     transitionTopPage() {

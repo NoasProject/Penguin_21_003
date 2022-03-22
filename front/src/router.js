@@ -4,6 +4,7 @@ import VueRouter from "vue-router";
 import Login from "./views/Login.vue"
 import Accountregister from "./views/Accountregister.vue"
 import Top from "./views/Top.vue"
+import { authGuard } from "./auth/authGuard";
 
 //
 // 他のコンポーネントは省略
@@ -17,18 +18,20 @@ const routes = [
         path: "",
         name: "login",
         component: Login,
+        beforeEnter: authGuard
     },
     // 登録
     {
         path: "/accountRegister",
         name: "accountRegister",
-        component: Accountregister,
+        component: Accountregister
     },
     // トップページ
     {
         path: "/top",
         name: "top",
         component: Top,
+        beforeEnter: authGuard
     },
 ];
 

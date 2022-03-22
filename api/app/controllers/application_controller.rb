@@ -1,16 +1,34 @@
-class ApplicationController < ActionController::Base
-  include DeviseTokenAuth::Concerns::SetUserByToken
-  skip_before_action :verify_authenticity_token
-  after_action :set_csrf_token_header
+require 'securerandom'
 
-  def set_csrf_token_header
-    response.set_header('X-CSRF-Token', form_authenticity_token)
-  end
+class ApplicationController < ActionController::Base
+  before_action :set_user
+  after_action :set_access_token
+  skip_before_action :verify_authenticity_token
 
   protected
 
-  def get_user
-    @user = current_v1_user
-    @user_id = @user[:id]
+  def set_user
+    @token = Digest::MD5.hexdigest(request.headers[:Token])
+    @accessToken = Digest::MD5.hexdigest(request.headers[:AccessToken])
+
+    puts 'RealToken: ' + request.headers[:Token]
+    puts 'Token: ' + @token
+    puts 'AccessToken: ' + @accessToken
+
+    @userAccount = User.find_by(token: @token)
+    # アカウントが存在しない
+    if @userAccount != nil
+      @user_id = @userAccount[:id]
+    end
+  end
+
+  # アクセストークンの更新処理をする
+  def set_access_token
+
+    accessToken = SecureRandom.alphanumeric
+
+    if @userAccount != nil && @userAccount.update(access_token: accessToken)
+      response.set_header("AccessToken", accessToken)
+    end
   end
 end

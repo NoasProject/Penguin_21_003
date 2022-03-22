@@ -42,7 +42,7 @@ export default {
     Modal,
   },
   created() {
-    this.onGetUserAsync();
+    this.user = this.$account.user;
   },
   props: {
     loginToken: String,
@@ -51,7 +51,6 @@ export default {
   data() {
     return {
       user: null,
-      user_id: this.$cookies.get("user_id"),
       images: {
         like: require("@/assets/like_32.png"),
         comment: require("@/assets/comment_32.png"),
@@ -59,41 +58,20 @@ export default {
     };
   },
   methods: {
+    /*
     // ユーザーデータの取得を行う
     onGetUserAsync: async function () {
       // User一覧
       await this.axios
-        .get("http://localhost:3002/users/" + this.user_id, {
-          headers: {
-            uid: this.$cookies.get("uid"),
-            "access-token": this.$cookies.get("access-token"),
-            client: this.$cookies.get("client"),
-            expiry: this.$cookies.get("expiry"),
-            "token-type": this.$cookies.get("token-type"),
-          },
-        })
+        .get(this.axios.defaults.baseUrl + "/users/" + this.user_id, {})
         .then((response) => {
           this.user = response.data;
-
-          var accessToken = response.headers["access-token"];
-          var uid = response.headers["uid"];
-          var client = response.headers["client"];
-          var expiry = response.headers["expiry"];
-          var tokenType = response.headers["token-type"];
-
-          this.$cookies.set("access-token", accessToken, { expires: 5 });
-          this.$cookies.set("uid", uid, { expires: 5 });
-          this.$cookies.set("client", client, { expires: 5 });
-          this.$cookies.set("expiry", expiry, { expires: 5 });
-          this.$cookies.set("token-type", tokenType, { expires: 5 });
-
-          this.axios.defaults.headers.common["X-CSRF-Token"] =
-            response.headers["x-csrf-token"];
         })
         .catch((e) => {
           alert(e);
         });
     },
+    */
 
     // プロフィール
     onClickProfile: function () {

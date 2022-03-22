@@ -19,6 +19,10 @@
         <b-button variant="danger" style="width:100%;" v-on:click="transitionAccountRegister()">
           アカウント登録を行う
         </b-button>
+<!-- 
+        <b-button variant="danger" style="width:100%;" v-on:click="onLogout()">
+          ログアウト
+        </b-button> -->
         </p>
       </b-col>
     </div>
@@ -28,9 +32,9 @@
 <script>
 export default {
   created() {
-    this.$cookies.remove("access-token");
-    var token = this.$cookies.get("access-token");
-    if (this.$cookies.isKey("access-token") && token != "undefined") {
+    console.log("hasToken: " + this.$account.hasToken());
+
+    if (this.$account.hasToken()) {
       console.log("Tokenが存在するため、Tokenログインを行います");
       this.transitionTopPage();
     }
@@ -49,38 +53,30 @@ export default {
   },
   props: {},
   methods: {
+    // ログアウト処理
+    onLogout() {
+      this.$auth.logout({
+        returnTo: window.location.origin,
+      });
+    },
+
     // ログイン処理
-    onLogin: function () {
-      var p = {
-        email: this.login.email,
-        password: this.login.password,
-      };
+    onLogin: async function () {
+      var isRegister = await this.$account.isRegister();
 
-      this.axios
-        .post("http://localhost:3002/v1/auth/sign_in", p)
-        .then((response) => {
-          var accessToken = response.headers["access-token"];
-          var uid = response.headers["uid"];
-          var client = response.headers["client"];
-          var expiry = response.headers["expiry"];
-          var tokenType = response.headers["token-type"];
-          var userId = response.data.data["id"];
-          console.log(userId);
+      console.log("isRegister: " + isRegister);
 
-          this.$cookies.set("access-token", accessToken, { expires: 5 });
-          this.$cookies.set("uid", uid, { expires: 5 });
-          this.$cookies.set("client", client, { expires: 5 });
-          this.$cookies.set("expiry", expiry, { expires: 5 });
-          this.$cookies.set("token-type", tokenType, { expires: 5 });
-          this.$cookies.set("user_id", userId, { expires: 5 });
+      // 登録済みの場合はログイン処理をする
+      if (isRegister) {
+        // ログイン処理をする
+        await this.$account.Login();
 
-          this.axios.defaults.headers.common["X-CSRF-Token"] =
-            response.headers["x-csrf-token"];
-          this.transitionTopPage();
-        })
-        .catch((e) => {
-          alert(e);
-        });
+        // Topへ移動する
+        this.transitionTopPage();
+      }
+      // アカウント登録処理をする
+      else {
+      }
     },
 
     transitionTopPage() {

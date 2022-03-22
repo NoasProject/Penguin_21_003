@@ -1,8 +1,6 @@
 class LikesController < ApplicationController
-  before_action :get_user
   before_action :set_like, only: [:show, :update]
   before_action :set_like_id, only: [:destroy]
-  before_action :authenticate_v1_user!, except: [:new, :create]
 
   # GET /likes
   def index

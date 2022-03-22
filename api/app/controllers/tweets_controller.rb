@@ -1,14 +1,14 @@
 class TweetsController < ApplicationController
   before_action :set_tweet, only: [:show, :update, :destroy]
-  before_action :authenticate_v1_user!
-  before_action :get_user
 
   # GET /tweets
   def index
-    # @tweets = Tweet.where(user_id: @user.id)
-    @tweets = Tweet.all
-    # left_outer_joins(:user_profile)
-    render json: @tweets
+    @tweets = Tweet.all.where(user_id: @user_id)
+    # @tweets.each do |tweet|
+    #   tweet[:comments] = Comment.all.where(tweet_id: tweet[:id])
+    # end
+    # render json: { data: @tweets.as_json(include: :user, methods: "hoge") }
+    render json: { data: @tweets.as_json(include: [:user, :comments, :likes]) }
   end
 
   # GET /tweets/1

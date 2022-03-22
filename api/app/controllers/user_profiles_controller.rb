@@ -1,7 +1,5 @@
 class UserProfilesController < ApplicationController
   before_action :set_user_profile, only: [:show, :update, :destroy]
-  before_action :authenticate_v1_user!
-  before_action :get_user
 
   # GET /user_profiles
   def index

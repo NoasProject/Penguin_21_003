@@ -16,6 +16,7 @@ import { Auth0Plugin } from "./auth";
 Vue.use(Auth0Plugin, {
     domain,
     clientId,
+    audience,
     onRedirectCallback: appState => {
         router.push(
             appState && appState.targetUrl
@@ -37,9 +38,10 @@ Vue.use(bootstrapVue);
 // this.$accountでアクセス可能
 import { AccountService } from "./accountService";
 Vue.use(AccountService, {
-    "auth": Auth0Plugin
+    domain,
+    clientId,
+    audience,
 });
-
 
 const vue = new Vue({
     router: router,

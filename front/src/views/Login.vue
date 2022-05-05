@@ -19,10 +19,10 @@
         <b-button variant="danger" style="width:100%;" v-on:click="transitionAccountRegister()">
           アカウント登録を行う
         </b-button>
-<!-- 
+
         <b-button variant="danger" style="width:100%;" v-on:click="onLogout()">
           ログアウト
-        </b-button> -->
+        </b-button>
         </p>
       </b-col>
     </div>
@@ -31,30 +31,21 @@
 
 <script>
 export default {
-  created() {
-    console.log("hasToken: " + this.$account.hasToken());
-
-    if (this.$account.hasToken()) {
-      console.log("Tokenが存在するため、Tokenログインを行います");
-      this.transitionTopPage();
-    }
-
-    console.log("tokenが存在しません");
-  },
   data() {
     return {
       login: {
         email: "sample@xxx.com",
         password: "01234567890",
         name: undefined,
-        token: undefined,
       },
     };
   },
+  created() {},
   props: {},
   methods: {
     // ログアウト処理
     onLogout() {
+      this.$account.deleteCookie();
       this.$auth.logout({
         returnTo: window.location.origin,
       });
@@ -62,29 +53,12 @@ export default {
 
     // ログイン処理
     onLogin: async function () {
-      var isRegister = await this.$account.isRegister();
-
-      console.log("isRegister: " + isRegister);
-
-      // 登録済みの場合はログイン処理をする
-      if (isRegister) {
-        // ログイン処理をする
-        await this.$account.Login();
-
-        // Topへ移動する
-        this.transitionTopPage();
-      }
-      // アカウント登録処理をする
-      else {
-      }
-    },
-
-    transitionTopPage() {
+      // アクセストークンを更新する
+      await this.$account.setAccessTokenAsync();
+      // ログイン処理をする
+      await this.$account.Login();
+      // Topへ移動する
       this.$router.push("/top");
-    },
-
-    transitionAccountRegister() {
-      this.$router.push("/accountRegister");
     },
   },
 };

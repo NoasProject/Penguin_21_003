@@ -1,6 +1,6 @@
 <template>
   <div class="d-block text-center">
-    <label>{{ tweet.user.name }}({{tweet.user_id}})</label>
+    <label>{{ tweet.user.name ?? "" }}({{tweet.user_id}})</label>
     <div class="col">
      <div class="p-3 border bg-light">{{tweet.content}}</div>
     </div>
@@ -55,7 +55,7 @@ export default {
     onClickComment: async function () {
       // 解除する
       await this.axios
-        .post("http://localhost:3003/comments/", {
+        .post(this.axios.defaults.baseUrl + "/comments/", {
           comment: {
             tweet_id: this.tweet.id,
             comment: this.input.comment,

@@ -8,8 +8,8 @@
 
 
 # Userの作成
-User.create(:name => 'TEST1', :token => '123456789ABC', :access_token => 'accesstoken1', :description => 'TEST_001_Description')
-User.create(:name => 'TEST2', :token => '123456789ABC002', :access_token => 'accesstoken2', :description => 'TEST_002_Description')
+User.create(:name => 'TEST1', :auth0_sub => '123456789ABC', :description => 'TEST_001_Description')
+User.create(:name => 'TEST2', :auth0_sub => '123456789ABC002', :description => 'TEST_002_Description')
 
 # Tweet
 Tweet.create(:user_id => 2, :content => 'Tweetしてみているよー!')

@@ -1,4 +1,5 @@
-class UsersController < ApplicationController
+class UsersController < PrivateController
+  # before_action :authenticate_user!, except: [:exits, :register]
 
   # GET /user
   def index
@@ -11,30 +12,12 @@ class UsersController < ApplicationController
     render json: @user
   end
 
-  # POST /users/exits
-  # Userが存在するかチェックする
-  def exits
-    result = { is_register: false }
-
-    logger.debug @userAccount
-
-    # アカウントが存在する場合
-    if @userAccount != nil
-      result[:is_register] = true
-    end
-
-    render json: result
-  end
-
-  # POST /users/register
-  # Userを作成する
-  def register
-    @user = User.new(user_params)
-    @user[:token] = @token
-    if @user.save
-      render json: @user, status: :created
+  # PATCH/PUT /user
+  def update
+    if @userAccount.update(user_params)
+      render json: @userAccount
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: @userAccount.errors, status: :unprocessable_entity
     end
   end
 
@@ -46,7 +29,6 @@ class UsersController < ApplicationController
     end
 
     render json: @userAccount
-
   end
 
   # DELETE /user/1

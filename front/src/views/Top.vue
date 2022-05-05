@@ -46,12 +46,6 @@ export default {
     TweetTree,
   },
   created() {
-    if (this.$account.hasToken() === false) {
-      console.log("tokenが存在しません");
-      this.transitionRoot();
-      return;
-    }
-
     this.onGetTweets();
   },
   data() {

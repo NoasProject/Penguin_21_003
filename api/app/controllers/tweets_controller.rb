@@ -1,4 +1,4 @@
-class TweetsController < ApplicationController
+class TweetsController < PrivateController
   before_action :set_tweet, only: [:show, :update, :destroy]
 
   # GET /tweets
@@ -8,7 +8,7 @@ class TweetsController < ApplicationController
     #   tweet[:comments] = Comment.all.where(tweet_id: tweet[:id])
     # end
     # render json: { data: @tweets.as_json(include: :user, methods: "hoge") }
-    render json: { data: @tweets.as_json(include: [:user, :comments, :likes]) }
+    render json: @tweets.as_json(include: [:user, :comments, :likes])
   end
 
   # GET /tweets/1

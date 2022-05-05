@@ -1,4 +1,4 @@
-class LikesController < ApplicationController
+class LikesController < PrivateController
   before_action :set_like, only: [:show, :update]
   before_action :set_like_id, only: [:destroy]
 

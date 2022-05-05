@@ -70,7 +70,7 @@ export default {
       if (isLike) {
         // 解除する
         await this.axios
-          .delete("http://localhost:3003/likes/" + myLike.id, {
+          .delete(this.axios.defaults.baseUrl + "/likes/" + myLike.id, {
             like: {
               tweet_id: this.tweet.id,
             },
@@ -87,7 +87,7 @@ export default {
       } else {
         // 登録する
         await this.axios
-          .post("http://localhost:3003/likes", {
+          .post(this.axios.defaults.baseUrl + "/likes", {
             tweet_id: this.tweet.id,
           })
           .then((response) => {

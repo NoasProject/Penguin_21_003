@@ -4,7 +4,7 @@ import VueRouter from "vue-router";
 import Login from "./views/Login.vue"
 import Accountregister from "./views/Accountregister.vue"
 import Top from "./views/Top.vue"
-import { authGuard } from "./auth/authGuard";
+import { authGuard } from "./authGuard/authGuard";
 
 //
 // 他のコンポーネントは省略

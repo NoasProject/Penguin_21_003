@@ -27,7 +27,13 @@ export const useAuth0 = ({
                 user: {},
                 auth0Client: null,
                 popupOpen: false,
-                error: null
+                error: null,
+
+                authConfig: {
+                    domain: options.domain,
+                    clientId: options.clientId,
+                    audience: options.audience,
+                }
             };
         },
         methods: {
@@ -67,15 +73,19 @@ export const useAuth0 = ({
             },
             /** Authenticates the user using the redirect method */
             loginWithRedirect(o) {
-                return this.auth0Client.loginWithRedirect(o);
+                let _o = o;
+                if ('audience' in _o === false) {
+                    _o['audience'] = this.authConfig.audience;
+                }
+                return this.auth0Client.loginWithRedirect(_o);
             },
             /** Returns all the claims present in the ID token */
             getIdTokenClaims(o) {
                 return this.auth0Client.getIdTokenClaims(o);
             },
             /** Returns the access token. If the token is invalid or missing, a new one is retrieved */
-            getTokenSilently(o) {
-                return this.auth0Client.getTokenSilently(o);
+            getTokenSilently() {
+                return this.auth0Client.getTokenSilently({ audience: options.audience });
             },
             /** Gets the access token using a popup window */
 
@@ -85,7 +95,7 @@ export const useAuth0 = ({
             /** Logs the user out and removes their session on the authorization server */
             logout(o) {
                 return this.auth0Client.logout(o);
-            }
+            },
         },
         /** Use this lifecycle method to instantiate the SDK client */
         async created() {

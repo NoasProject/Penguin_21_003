@@ -1,4 +1,4 @@
-class CommentsController < ApplicationController
+class CommentsController < PrivateController
   before_action :set_comment, only: [:show, :update, :destroy]
 
   # GET /comments

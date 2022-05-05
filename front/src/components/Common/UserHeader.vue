@@ -43,6 +43,7 @@ export default {
   },
   created() {
     this.user = this.$account.user;
+    console.log(this.user);
   },
   props: {
     loginToken: String,
@@ -80,9 +81,7 @@ export default {
 
     // ログアウト処理
     onClickLogout: function () {
-      this.$cookies.keys().forEach((key) => {
-        this.$cookies.remove(key);
-      });
+      this.$account.deleteCookie();
 
       this.transitionRoot();
     },
